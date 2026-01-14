@@ -1,0 +1,7 @@
+apiVersion: helm.hops.ops.com.ai/v1alpha1
+kind: Keda
+metadata:
+  name: keda
+  namespace: example-env
+spec:
+  clusterName: my-cluster

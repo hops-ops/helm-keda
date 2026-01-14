@@ -1,0 +1,8 @@
+apiVersion: helm.hops.ops.com.ai/v1alpha1
+kind: Keda
+metadata:
+  name: e2e-keda
+  namespace: e2e-test
+spec:
+  clusterName: e2e-cluster
+  namespace: keda

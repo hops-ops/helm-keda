@@ -1,0 +1,20 @@
+apiVersion: helm.hops.ops.com.ai/v1alpha1
+kind: Keda
+metadata:
+  name: keda
+  namespace: example-env
+  uid: test-uid-standard
+spec:
+  clusterName: my-cluster
+  namespace: keda
+  labels:
+    team: platform
+    environment: production
+  providerConfigRef:
+    name: my-cluster
+    kind: ProviderConfig
+  values:
+    operator:
+      replicaCount: 2
+    metricsServer:
+      replicaCount: 1

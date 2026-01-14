@@ -1,0 +1,36 @@
+{{- $state := $.state }}
+{{- $keda := $state.keda }}
+
+{{- /* Build Helm values */}}
+{{- $defaultValues := dict
+  "fullnameOverride" "keda"
+  "nameOverride" "keda"
+}}
+
+{{- $helmValues := dict }}
+{{- if $keda.overrideAllValues | len }}
+  {{- $helmValues = $keda.overrideAllValues }}
+{{- else }}
+  {{- $helmValues = mustMergeOverwrite $defaultValues $keda.values }}
+{{- end }}
+
+---
+apiVersion: helm.m.crossplane.io/v1beta1
+kind: Release
+metadata:
+  name: {{ $keda.name }}-helm-release
+  labels: {{ $keda.labels | toJson }}
+  annotations:
+    {{ setResourceNameAnnotation "helm-release" }}
+spec:
+  managementPolicies: {{ $keda.managementPolicies | toJson }}
+  providerConfigRef:
+    name: {{ $keda.providerConfigRef.name }}
+    kind: {{ $keda.providerConfigRef.kind }}
+  forProvider:
+    chart:
+      name: keda
+      repository: https://kedacore.github.io/charts
+      version: "2.18.3"
+    namespace: {{ $keda.namespace }}
+    values: {{ $helmValues | toJson }}
